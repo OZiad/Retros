@@ -41,3 +41,4 @@
 *.dwo
 compile_commands.json
 /out
+/resources

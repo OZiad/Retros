@@ -5,7 +5,7 @@ set(PROJECT_NAME "Retros")
 
 project(${PROJECT_NAME} VERSION ${VERSION} LANGUAGES CXX)
 
-add_executable(${PROJECT_NAME} src/main.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp src/MappedFile.cpp)
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})

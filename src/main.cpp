@@ -10,5 +10,9 @@ namespace fs = std::filesystem;
 int main(int argc, char **argv) {
   fs::path filePath = "resources/clean_data.pcap";
   MappedFile mappedFile(filePath);
-  iex::parser::parseIEX(mappedFile.view());
+  iex::parser::parseIEX(
+      mappedFile.view()); // TODO: let producer thread handle this
+
+  // TODO: consumer thread, create new OrderBook every time a new symbol is
+  // encountered (lazy loading basically)
 }

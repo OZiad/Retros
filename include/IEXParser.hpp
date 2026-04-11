@@ -34,6 +34,7 @@ inline void parseIEX(std::string_view buffer) {
             std::string_view symbol(priceLevelUpdate->symbol, 8);
             double realPrice = priceLevelUpdate->price / 10000.0;
 
+            // TODO: pass to consumer instead of printing
             std::cout << std::format("[BOOK priceLevelUpdate] msgType: {}, "
                                      "Symbol: {} Size: {}, Price: ${}\n",
                                      char(msgType), symbol,

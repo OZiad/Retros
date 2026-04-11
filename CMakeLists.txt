@@ -15,6 +15,7 @@ set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
 
+set(CTEST_OUTPUT_ON_FAILURE 1)
 include(CTest)
 enable_testing()
 include(FetchContent)

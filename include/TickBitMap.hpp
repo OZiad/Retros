@@ -49,7 +49,7 @@ public:
         for (int j = wordsRow.size() - 1; j >= 0; --j) {
           if (uint64_t word = wordsRow[j]; word != 0) {
             int bitPos = std::bit_width(word) - 1;
-            size_t index = (i * BITS_PER_ROW) + (j * BITS_PER_WORD) + bitPos;
+            size_t index = (row * BITS_PER_ROW) + (j * BITS_PER_WORD) + bitPos;
             return index;
           }
         }
@@ -61,14 +61,13 @@ public:
   std::optional<size_t> getLowestTickIndex() const {
     for (size_t i = 0; i < wordsSummary.size(); ++i) {
       if (uint64_t summary = wordsSummary[i]; summary != 0) {
-        uint32_t rowInBlock =
-            static_cast<uint32_t>(std::bit_width(summary) - 1);
+        uint32_t rowInBlock = static_cast<uint32_t>(std::countr_zero(summary));
         uint32_t row = (i * 64) + rowInBlock;
         const auto &wordsRow = words[row];
         for (size_t j = 0; j < wordsRow.size(); ++j) {
           if (uint64_t word = wordsRow[j]; word != 0) {
-            int bitPos = std::bit_width(word) - 1;
-            size_t index = (i * BITS_PER_ROW) + (j * BITS_PER_WORD) + bitPos;
+            int bitPos = std::countr_zero(word);
+            size_t index = (row * BITS_PER_ROW) + (j * BITS_PER_WORD) + bitPos;
             return index;
           }
         }

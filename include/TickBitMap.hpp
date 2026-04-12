@@ -1,5 +1,6 @@
 #include <array>
 #include <bit>
+#include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <optional>
@@ -14,12 +15,18 @@ private:
       wordsSummary{};
 
 public:
-  void setTick(uint32_t tick, bool value) {
-    size_t row = tick / BITS_PER_ROW;
-    size_t col = (tick % BITS_PER_ROW) / BITS_PER_WORD;
-    size_t pos = tick % BITS_PER_WORD;
-    uint64_t bit = (1ULL << pos);
-    uint64_t summaryBit = (1ULL << row % 64);
+  void setTick(const uint32_t tick, const bool value) const {
+    const size_t row = tick / BITS_PER_ROW;
+
+    assert(row < NumRows && "Tick index is out of bounds");
+    if ((row >= NumRows) || tick < 0) [[unlikely]] {
+      return;
+    }
+
+    const size_t col = (tick % BITS_PER_ROW) / BITS_PER_WORD;
+    const size_t pos = tick % BITS_PER_WORD;
+    const uint64_t bit = (1ULL << pos);
+    const uint64_t summaryBit = (1ULL << row % 64);
 
     if (value) {
       words[row][col] |= bit;

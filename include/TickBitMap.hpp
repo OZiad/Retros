@@ -15,7 +15,7 @@ private:
       wordsSummary{};
 
 public:
-  void setTick(const uint32_t tick, const bool value) const {
+  void setTick(const uint64_t tick, const bool value) const {
     const size_t row = tick / BITS_PER_ROW;
 
     assert(row < NumRows && "Tick index is out of bounds");

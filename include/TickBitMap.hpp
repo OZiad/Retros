@@ -47,7 +47,7 @@ public:
     }
   }
 
-  std::optional<size_t> findMaxTickIndex() const {
+  std::optional<size_t> getMaxTickIndex() const {
     for (int i = static_cast<int>(wordsSummary.size() - 1); i >= 0; --i) {
       if (wordsSummary[i] != 0) {
         size_t rowInBlock = std::bit_width(wordsSummary[i]) - 1;

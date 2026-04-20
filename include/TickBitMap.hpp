@@ -15,11 +15,11 @@ private:
       wordsSummary{};
 
 public:
-  void setTick(const uint64_t tick, const bool value) const {
+  void setTick(const uint64_t tick, const bool value) {
     const size_t row = tick / BITS_PER_ROW;
 
     assert(row < NumRows && "Tick index is out of bounds");
-    if ((row >= NumRows) || tick < 0) [[unlikely]] {
+    if ((row >= NumRows)) [[unlikely]] {
       return;
     }
 
@@ -48,14 +48,14 @@ public:
   }
 
   std::optional<size_t> getMaxTickIndex() const {
-    for (int i = static_cast<int>(wordsSummary.size() - 1); i >= 0; --i) {
+    for (int i = static_cast<int>(wordsSummary.size()) - 1; i >= 0; --i) {
       if (wordsSummary[i] != 0) {
-        size_t rowInBlock = std::bit_width(wordsSummary[i]) - 1;
+        size_t rowInBlock = 63 - std::countl_zero(wordsSummary[i]);
         size_t row = (static_cast<size_t>(i) * 64) + rowInBlock;
         const auto &wordsRow = words[row];
-        for (int j = wordsRow.size() - 1; j >= 0; --j) {
+        for (int j = static_cast<int>(wordsRow.size()) - 1; j >= 0; --j) {
           if (uint64_t word = wordsRow[j]; word != 0) {
-            int bitPos = std::bit_width(word) - 1;
+            int bitPos = 63 - std::countl_zero(word);
             size_t index = (row * BITS_PER_ROW) + (j * BITS_PER_WORD) + bitPos;
             return index;
           }
@@ -81,5 +81,18 @@ public:
       }
     }
     return std::nullopt;
+  }
+
+  bool test(const uint64_t tick) const {
+    const size_t row = tick / BITS_PER_ROW;
+
+    if (row >= NumRows) [[unlikely]] {
+      return false;
+    }
+
+    const size_t col = (tick % BITS_PER_ROW) / BITS_PER_WORD;
+    const size_t pos = tick % BITS_PER_WORD;
+
+    return (words[row][col] & (1ULL << pos)) != 0;
   }
 };

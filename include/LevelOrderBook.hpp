@@ -39,6 +39,7 @@ public:
   size_t getHeadIndex() const { return headIdx; }
   uint32_t getSize() const { return size; }
   Side getSide() const { return side; }
+  void setPrice(uint64_t newPrice) { price = newPrice; }
   void setHeadIndex(size_t newHeadIdx) { headIdx = newHeadIdx; }
   void setSize(uint32_t newSize) { size = newSize; }
 };
@@ -55,13 +56,14 @@ private:
   TickBitMap<> askPriceLevelTracker_;
   inline static constexpr PriceLevel NULL_LEVEL{0, 0, 0, Side::Bid};
 
+  constexpr size_t calculateIndex(const uint64_t price) const;
   bool insertBidPriceLevel(const PriceLevel &priceLevel_);
   bool insertAskPriceLevel(const PriceLevel &priceLevel_);
 
 public:
-  LevelOrderBook();
+  explicit LevelOrderBook(const uint64_t initialMinPrice);
   bool insertPriceLevel(const PriceLevel &priceLevel);
   const PriceLevel &getMaxBidPriceLevel() const;
   const PriceLevel &getMinAskPriceLevel() const;
-  void updatePriceLevel(const uint64_t price, uint32_t size, Side side);
+  bool updatePriceLevel(const uint64_t price, uint32_t size, Side side);
 };

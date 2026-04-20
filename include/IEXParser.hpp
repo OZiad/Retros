@@ -6,7 +6,8 @@
 
 namespace iex::parser {
 
-inline void parseIEX(std::string_view buffer) {
+template <typename Callback>
+inline void parseIEX(std::string_view buffer, Callback &&onUpdate) {
   const char *data = buffer.data();
   size_t offset = sizeof(PcapGlobalHeader);
 
@@ -32,13 +33,13 @@ inline void parseIEX(std::string_view buffer) {
             auto priceLevelUpdate =
                 reinterpret_cast<const PriceLevelUpdate *>(data + msgPos);
             std::string_view symbol(priceLevelUpdate->symbol, 8);
-            double realPrice = priceLevelUpdate->price / 10000.0;
-
-            // TODO: pass to consumer instead of printing
+            onUpdate(symbol, priceLevelUpdate->price, priceLevelUpdate->size,
+                     priceLevelUpdate->type);
             std::cout << std::format("[BOOK priceLevelUpdate] msgType: {}, "
                                      "Symbol: {} Size: {}, Price: ${}\n",
                                      char(msgType), symbol,
-                                     priceLevelUpdate->size, realPrice);
+                                     priceLevelUpdate->size,
+                                     priceLevelUpdate->price);
           }
           msgPos += *msgSize;
         }

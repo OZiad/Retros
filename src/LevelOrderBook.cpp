@@ -2,8 +2,9 @@
 #include <cstdint>
 #include <optional>
 
-LevelOrderBook::LevelOrderBook(const uint64_t initialMinPrice)
-    : minPrice_{initialMinPrice} {
+LevelOrderBook::LevelOrderBook(const uint16_t symbolId,
+                               const uint64_t initialMinPrice)
+    : minPrice_{initialMinPrice}, symbolId{symbolId} {
   poolIdxById_.reserve(10'000'000);
 }
 

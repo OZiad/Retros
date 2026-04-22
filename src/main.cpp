@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <fcntl.h>
 #include <filesystem>
+#include <iostream>
 #include <string_view>
 #include <sys/mman.h>
 #include <unistd.h>
@@ -17,8 +18,8 @@ int main(int argc, char **argv) {
   std::vector<LevelOrderBook> symbolOrderBooks;
   symbolOrderBooks.reserve(1000);
 
-  auto onPriceUpdate = [&](std::string_view symbol, uint64_t price,
-                           uint32_t size, bool isBuySide) {
+  auto onPriceUpdate = [&](const std::string_view symbol, const uint64_t price,
+                           const uint32_t size, const bool isBuySide) {
     auto [it, inserted] = symbolIdMap.try_emplace(
         symbol, static_cast<uint16_t>(symbolIdMap.size()));
     uint16_t id = it->second;
@@ -34,6 +35,12 @@ int main(int argc, char **argv) {
     } else {
       symbolOrderBooks[id].updatePriceLevel(price, size, Ask);
     }
+    auto bestBid = symbolOrderBooks[id].getMaxBidPriceLevel();
+    auto bestAsk = symbolOrderBooks[id].getMinAskPriceLevel();
+    std::cout << std::format("[SYMBOL]: {}...[BEST BID]: PRICE: {}, SIZE: "
+                             "{}...[BEST ASK]: PRICE: {}, SIZE: {}\n",
+                             symbol, bestBid.getPrice(), bestBid.getSize(),
+                             bestAsk.getPrice(), bestAsk.getSize());
   };
 
   iex::parser::parseIEX(mappedFile.view(), onPriceUpdate);

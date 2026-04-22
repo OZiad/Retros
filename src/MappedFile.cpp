@@ -12,6 +12,7 @@ MappedFile::MappedFile(const fs::path &path) {
   }
   size_ = fs::file_size(path);
   data_ = mmap(nullptr, size_, PROT_READ, MAP_PRIVATE, fd_, 0);
+
   if (data_ == MAP_FAILED) {
     close(fd_);
     throw std::runtime_error("mmap failed");

@@ -17,7 +17,7 @@ bool LevelOrderBook::insertPriceLevel(const PriceLevel &priceLevel) {
                                      : insertAskPriceLevel(priceLevel);
 }
 
-bool LevelOrderBook::updatePriceLevel(const uint64_t price, uint32_t size,
+bool LevelOrderBook::updatePriceLevel(const uint64_t price, const uint32_t size,
                                       Side side) {
   if (price < minPrice_) [[unlikely]] {
     return false;

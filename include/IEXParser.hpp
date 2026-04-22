@@ -1,7 +1,5 @@
 #pragma once
 #include "MessageProtocols.hpp"
-#include <format>
-#include <iostream>
 #include <string_view>
 
 namespace iex::parser {
@@ -35,11 +33,6 @@ inline void parseIEX(std::string_view buffer, Callback &&onUpdate) {
             std::string_view symbol(priceLevelUpdate->symbol, 8);
             onUpdate(symbol, priceLevelUpdate->price, priceLevelUpdate->size,
                      priceLevelUpdate->type);
-            std::cout << std::format("[BOOK priceLevelUpdate] msgType: {}, "
-                                     "Symbol: {} Size: {}, Price: ${}\n",
-                                     char(msgType), symbol,
-                                     priceLevelUpdate->size,
-                                     priceLevelUpdate->price);
           }
           msgPos += *msgSize;
         }

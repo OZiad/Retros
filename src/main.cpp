@@ -19,8 +19,8 @@ int main(int argc, char **argv) {
   ankerl::unordered_dense::map<std::string_view, uint16_t> symbolIdMap;
   std::vector<LevelOrderBook> symbolOrderBooks;
   symbolOrderBooks.reserve(1000);
-  DatabaseLogger logger(
-      "dbname=retros user=omar password=your_secure_password host=localhost");
+  DatabaseLogger logger("dbname=retros user=omar "
+                        "password=testPasswordForProject123 host=localhost");
 
   auto onPriceUpdate = [&](const std::string_view symbol, const uint64_t price,
                            const uint32_t size, const bool isBuySide,

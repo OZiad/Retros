@@ -17,8 +17,6 @@ add_executable(bitmap_test tests/TickBitMapTest.cpp)
 target_include_directories(${PROJECT_NAME} PRIVATE include)
 target_include_directories(bitmap_test PRIVATE include)
 
-find_package(pqxx REQUIRED)
-target_link_libraries(Retros PRIVATE pqxx::pqxx)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
@@ -34,7 +32,15 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
+FetchContent_Declare(
+  libpqxx
+  GIT_REPOSITORY https://github.com/jtv/libpqxx.git
+  GIT_TAG        7.10.5
+)
+FetchContent_MakeAvailable(libpqxx)
 
+target_link_libraries(${PROJECT_NAME} PRIVATE pqxx pq)
+target_link_libraries(${PROJECT_NAME} PRIVATE pqxx)
 target_link_libraries(bitmap_test GTest::gtest_main)
 
 include(GoogleTest)

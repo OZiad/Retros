@@ -32,7 +32,7 @@ inline void parseIEX(std::string_view buffer, Callback &&onUpdate) {
                 reinterpret_cast<const PriceLevelUpdate *>(data + msgPos);
             std::string_view symbol(priceLevelUpdate->symbol, 8);
             onUpdate(symbol, priceLevelUpdate->price, priceLevelUpdate->size,
-                     priceLevelUpdate->type);
+                     priceLevelUpdate->type, priceLevelUpdate->timestamp);
           }
           msgPos += *msgSize;
         }

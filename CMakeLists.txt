@@ -8,12 +8,17 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(${PROJECT_NAME}
-  src/main.cpp
+  src/LevelOrderBook.cpp
+  src/DatabaseLogger.cpp
   src/MappedFile.cpp
-  src/LevelOrderBook.cpp)
+  src/main.cpp)
 
 add_executable(bitmap_test tests/TickBitMapTest.cpp)
-target_include_directories(${PROJECT_NAME} PUBLIC include)
+target_include_directories(${PROJECT_NAME} PRIVATE include)
+target_include_directories(bitmap_test PRIVATE include)
+
+find_package(pqxx REQUIRED)
+target_link_libraries(Retros PRIVATE pqxx::pqxx)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
